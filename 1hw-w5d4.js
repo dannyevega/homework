@@ -112,10 +112,11 @@ function mysteryScoping5() {
 const madLib = (verb, adj, noun) => {
 	return `We shall ${verb.toUpperCase()} the ${adj.toUpperCase()} ${noun.toUpperCase()}`;
 }
-madLib("make", "best", "guac");
+// madLib("make", "best", "guac");
 
 
 
+// problem 7
 // ask kelly how he would do this? is using indexOf, includes, match, and test valid ways to solve this algorithm? or woiuld he want to iterate
 const isSubstring = (searchString, subString) => {
 	return searchString.indexOf(subString) !== -1;
@@ -123,11 +124,30 @@ const isSubstring = (searchString, subString) => {
 
 
 
+// problem 8
+const fizzBuzz = (arr) => {
+	let result = [];
+	for(let i = 0; i < arr.length; i++){
+		if(arr[i] % 3 === 0 && arr[i] % 5 === 0){
+			continue;
+		} else if(arr[i] % 3 === 0 || arr[i] % 5 === 0){
+			result.push(arr[i]);
+		}
+	}
+	return result;
+}
 
 
 
-
-
+// problem 9
+const isPrime = (num) => {
+	for(let i = 2; i * i <= num; i++){
+		if(num % i === 0){
+			return false;
+		}
+	}
+	return true;
+}
 
 
 
