@@ -1,3 +1,4 @@
+// Part 1
 // problem 1
 function mysteryScoping1() {
 	var x = 'out of block';
@@ -148,6 +149,132 @@ const isPrime = (num) => {
 	}
 	return true;
 }
+
+
+
+// skipped problem 10
+
+
+
+
+// Part 2
+// problem 1
+const titleize = (names, callback) => {
+	let result = [];
+	for(let i = 0; i < names.length; i++){
+		result.push(`Mx. ${names[i]} Jingleheimer Schmidt`)
+	}
+	callback(result);
+}
+const printNames = (names) => {
+	names.forEach((name) => {
+		console.log(name);
+	});
+}
+// titleize(["Mary", "Brian", "Leo"], printNames);
+
+// is the below function an acceptable callback?
+const titleize = (names) => {
+	let result = [];
+	for(let i = 0; i < names.length; i++){
+		result.push(`Mx. ${names[i]} Jingleheimer Schmidt`)
+	}
+	result.forEach((name) => {
+		console.log(name);
+	})
+}
+
+
+// problem 2
+function Elephant(name, height, tricks){
+	this.name = name;
+	this.height = height;
+	this.tricks = tricks;
+}
+Elephant.prototype.trumpet = function(){
+	console.log(`${this.name} the elephant goes 'phrRRRRRRRRRRR!!!!!!!'`);
+}
+Elephant.prototype.grow = function(){
+	return this.height += 12;
+}
+Elephant.prototype.addTrick = function(trick){
+	this.tricks.push(trick);
+	return trick;
+}
+Elephant.prototype.play = function(){
+	let random = Math.floor(Math.random() * this.tricks.length);
+	return `${this.name} is ${this.tricks[random]}!`;
+}
+let babyElephant = new Elephant("Harry", 62, ["painting a picture", "crying", "eating fruit"]);
+// babyElephant.trumpet();
+// babyElephant.grow();
+// console.log(babyElephant.height); // should be 74
+// babyElephant.addTrick("rolling down a hill");
+// console.log(babyElephant.tricks); // should have added "rolling down a hill"
+// babyElephant.play();
+
+
+
+// problem 3
+let ellie = new Elephant("Ellie", 185, ["giving human friends a ride", "playing hide and seek"]);
+let charlie = new Elephant("Charlie", 200, ["painting pictures", "spraying water for a slip and slide"]);
+let kate = new Elephant("Kate", 234, ["writing letters", "stealing peanuts"]);
+let micah = new Elephant("Micah", 143, ["trotting", "playing tic tac toe", "doing elephant ballet"]);
+let herd = [ellie, charlie, kate, micah];
+
+// option 1 -- is this correct?
+Elephant.prototype.paradeHelper = function(elephant){
+	return `${elephant.name} is trotting by!`;
+}
+herd.forEach((elephant) => {
+	console.log(elephant.paradeHelper());
+});
+
+// option 2 -- is this correct?
+Elephant.paradeHelper = function(elephant){
+	return `${elephant.name} is trotting by!`;
+}
+herd.forEach((elephant) => {
+	console.log(Elephant.paradeHelper(elephant));
+});
+
+
+
+// problem 4
+const dinerBreakfast = () => {
+	let order = "I'd like some scrambled eggs & bacon";
+	return (add) => {
+		if(add){
+			order = `${order} & ${add}`;
+		}
+		console.log(order);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
