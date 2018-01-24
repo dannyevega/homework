@@ -159,10 +159,7 @@ const isPrime = (num) => {
 // Part 2
 // problem 1
 const titleize = (names, callback) => {
-	let result = [];
-	for(let i = 0; i < names.length; i++){
-		result.push(`Mx. ${names[i]} Jingleheimer Schmidt`)
-	}
+	let result = names.map(name => `Mx. ${name} Jingleheimer Schmidt`);
 	callback(result);
 }
 const printNames = (names) => {
@@ -171,17 +168,11 @@ const printNames = (names) => {
 	});
 }
 // titleize(["Mary", "Brian", "Leo"], printNames);
+// OR
+// titleize(["Mary", "Brian", "Leo"], (names) => {
+// 	names.forEach(name => console.log(name));
+// });
 
-// is the below function an acceptable callback?
-const titleize = (names) => {
-	let result = [];
-	for(let i = 0; i < names.length; i++){
-		result.push(`Mx. ${names[i]} Jingleheimer Schmidt`)
-	}
-	result.forEach((name) => {
-		console.log(name);
-	})
-}
 
 
 // problem 2
