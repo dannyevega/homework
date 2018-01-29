@@ -103,35 +103,13 @@ const mergeSort = (arr) => {
 }
 // console.log(mergeSort([14,33,27,10,35,19,42,44])); // [ 10, 14, 19, 27, 33, 35, 42, 44 ]
 
-// const subsets = (arr) => {
-	
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const subsets = (arr) => {
+	let result = [];
+	for(let i = 0; i < arr.length; i++){
+		for(let j = i + 1; j < arr.length; j++){
+			result.push([arr[i], arr[j]]);
+		}
+	}
+	return result;
+}
+// console.log(subsets([1,2,3,4])); // [[1,2], [1,3], [1,4], [2,3], [2,4], [3,4]];
