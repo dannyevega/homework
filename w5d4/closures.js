@@ -344,29 +344,3 @@ let g = new FatCat("garfield"); // TypeError: FatCat is not a constructor
 
 // 13
 // Because they don't change scope, fat arrows don't have their own arguments object.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
