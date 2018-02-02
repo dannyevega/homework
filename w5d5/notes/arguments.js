@@ -95,32 +95,9 @@ console.log(madLib(...words)); // equivalent to 'madLib(words[0], words[1], word
 
 
 // We can also set default values in ES6
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function add(x, y = 17){
+	// y is 17 if not passed or passed as `undefined`
+	return x + y;
+}
+console.log(add(3) === 20); // true
+console.log(add(3, undefined) === 20); // true
