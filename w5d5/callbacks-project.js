@@ -76,47 +76,75 @@ Clock.prototype._incrementHours = function(){
 
 
 // Part 3
-const readline = require('readline');
+// const readline = require('readline');
 
-const reader = readline.createInterface({
-	input: process.stdin,
-	output: process.stdout
-});
+// const reader = readline.createInterface({
+// 	input: process.stdin,
+// 	output: process.stdout
+// });
 
-function askIfGreaterThan(first, second, callback){
-	reader.question(`Is ${first} greater than ${second}? `, (res) => {
-		const response = (res === 'yes') ? true : false;
-		callback(response);
-	});
+// function askIfGreaterThan(first, second, callback){
+// 	reader.question(`Is ${first} greater than ${second}? `, (res) => {
+// 		const response = (res === 'yes') ? true : false;
+// 		callback(response);
+// 	});
+// }
+
+// function innerBubbleSort(arr, i, swapped, outterBubbleSort){
+// 	if(i === (arr.length - 1)){
+// 		outterBubbleSort(swapped);
+// 		return;
+// 	} else {
+// 		askIfGreaterThan(arr[i], arr[i + 1], (isGreaterThan) => {
+// 			console.log(`swapped: ${swapped}`);
+// 			if(isGreaterThan === true){
+// 				swapped = true;
+// 				[arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+// 			}
+// 			console.log(`swapped: ${swapped}`);
+// 			innerBubbleSort(arr, i + 1, swapped, outterBubbleSort);
+// 		});
+// 	}
+// }
+
+// function absurdBubbleSort(arr, completionCallback){
+// 	function outterBubbleSort(madeAnySwaps){
+// 		if(madeAnySwaps === true){
+// 			innerBubbleSort(arr, 0, false, outterBubbleSort);
+// 		} else {
+// 			completionCallback(arr);
+// 		}
+// 	}
+// 	outterBubbleSort(true);
+// }
+
+// absurdBubbleSort([3, 2, 1], function (arr) {
+// 	console.log("Sorted array: " + JSON.stringify(arr));
+// 	reader.close();
+// });
+
+
+
+// Part 4
+Function.prototype.myBind = function(context){
+	return () => this.apply(context);
 }
 
-function innerBubbleSort(arr, i, swapped, outterBubbleSort){
-	if(i === (arr.length - 1)){
-		outterBubbleSort(swapped);
-		return;
-	} else {
-		askIfGreaterThan(arr[i], arr[i + 1], (isGreaterThan) => {
-			if(isGreaterThan === true){
-				swapped = true;
-				[arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
-			}
-			innerBubbleSort(arr, i + 1, swapped, outterBubbleSort);
-		});
+class Lamp {
+	constructor() {
+		this.name = "a lamp";
 	}
 }
 
-function absurdBubbleSort(arr, completionCallback){
-	function outterBubbleSort(madeAnySwaps){
-		if(madeAnySwaps === true){
-			innerBubbleSort(arr, 0, false, outterBubbleSort);
-		} else {
-			completionCallback(arr);
-		}
-	}
-	outterBubbleSort(true);
+const turnOn = function() {
+	console.log("Turning on " + this.name);
 }
 
-absurdBubbleSort([3, 2, 1], function (arr) {
-	console.log("Sorted array: " + JSON.stringify(arr));
-	reader.close();
-});
+const lamp = new Lamp();
+turnOn(); // should not work the way we want it to because we don't know what 'this' is refering to -- JS returns undefined since this.name will be saved in memory
+
+const boundTurnOn = turnOn.bind(lamp); // works because were telling turnOn fn what the context of 'this' is using .bind & passing in lamp object
+const myBoundTurnOn = turnOn.myBind(lamp); // Clarify with Kelly how this line below works using myBind
+
+boundTurnOn(); // should say "Turning on a lamp"
+myBoundTurnOn(); // should say "Turning on a lamp"
