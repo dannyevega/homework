@@ -1,3 +1,4 @@
+// Part 1
 function Clock(){
 	this.date = new Date();
 	this.hours = this.date.getHours();
@@ -44,6 +45,37 @@ Clock.prototype._incrementHours = function(){
 
 // const clock = new Clock();
 
+
+
+// Part 2
+// const readline = require('readline');
+
+// const reader = readline.createInterface({
+// 	input: process.stdin,
+// 	output: process.stdout
+// });
+
+// function addNumbers(sum, numsLeft, completionCallback){
+// 	if(numsLeft > 0){
+// 		reader.question("Fam, give me a number: ", (response) => {
+// 			const num = parseInt(response);
+// 			sum += num;
+// 			console.log(`Partial sum: ${sum}`);
+// 			addNumbers(sum, numsLeft - 1, completionCallback);
+// 		});
+// 	} else {
+// 		completionCallback(sum);
+// 	}
+// }
+
+// addNumbers(0, 3, (sum) => {
+// 	console.log(`Total sum: ${sum}`);
+// 	reader.close();
+// });
+
+
+
+// Part 3
 const readline = require('readline');
 
 const reader = readline.createInterface({
@@ -51,20 +83,40 @@ const reader = readline.createInterface({
 	output: process.stdout
 });
 
-function addNumbers(sum, numsLeft, completionCallback){
-	if(numsLeft > 0){
-		reader.question("Fam, give me a number: ", (response) => {
-			const num = parseInt(response);
-			sum += num;
-			console.log(`Partial sum: ${sum}`);
-			addNumbers(sum, numsLeft - 1, completionCallback);
-		});
+function askIfGreaterThan(first, second, callback){
+	reader.question(`Is ${first} greater than ${second}? `, (res) => {
+		const response = (res === 'yes') ? true : false;
+		callback(response);
+	});
+}
+
+function innerBubbleSort(arr, i, swapped, outterBubbleSort){
+	if(i === (arr.length - 1)){
+		outterBubbleSort(swapped);
+		return;
 	} else {
-		completionCallback(sum);
+		askIfGreaterThan(arr[i], arr[i + 1], (isGreaterThan) => {
+			if(isGreaterThan === true){
+				swapped = true;
+				[arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+			}
+			innerBubbleSort(arr, i + 1, swapped, outterBubbleSort);
+		});
 	}
 }
 
-addNumbers(0, 3, (sum) => {
-	console.log(`Total sum: ${sum}`);
+function absurdBubbleSort(arr, completionCallback){
+	function outterBubbleSort(madeAnySwaps){
+		if(madeAnySwaps === true){
+			innerBubbleSort(arr, 0, false, outterBubbleSort);
+		} else {
+			completionCallback(arr);
+		}
+	}
+	outterBubbleSort(true);
+}
+
+absurdBubbleSort([3, 2, 1], function (arr) {
+	console.log("Sorted array: " + JSON.stringify(arr));
 	reader.close();
-})
+});
