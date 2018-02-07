@@ -1,99 +1,56 @@
-// inheritance using Surrogate
-Function.prototype.inherits = function(BaseClass){
+// Using Surrogate trick
+Function.prototype.inherits = function(baseClass){
 	function Surrogate(){}
-	Surrogate.prototype = BaseClass.prototype;
-	this.prototype = new Surrogate();
-	// I changed the values of 'this' to BaseClass and it works the same -- would this be acceptable/same thing?
-	this.prototype.constructor = this;
-}
-
-function Dog(name){
-	this.name = name;
-}
-
-Dog.prototype.bark = function(){
-	console.log(`${this.name} barks!`);
-}
-
-function Corgi(name){
-	Dog.call(this, name);
-}
-
-Corgi.inherits(Dog);
-
-Corgi.prototype.waddle = function(){
-	console.log(`${this.name} waddles side to side!`);
-}
-
-const twinkie = new Corgi("Twinkie");
-// twinkie.waddle();
-// twinkie.bark();
-
-const reggie = new Dog("Reggie");
-// reggie.bark();
-// reggie.waddle(); // should not work
-
-
-Function.prototype.inherits = function(Class){
-	function Surrogate(){}
-	Surrogate.prototype = Class.prototype;
+	Surrogate.prototype = baseClass.prototype;
 	this.prototype = new Surrogate();
 	this.prototype.constructor = this;
 }
 
-function MovingObject(name){
+function MovingObject(name, type){
 	this.name = name;
+	this.type = type;
 }
 
-MovingObject.prototype.moves = function(){
-	console.log(`${this.name} moved 200ft!`);
+function Ship(name, type, captain){
+	MovingObject.call(this, name, type);
+	this.captain = captain;
 }
 
-function Ship(name){
-	MovingObject.call(this, name);
+function Asteroid(name, type, rock){
+	MovingObject.call(this, name, type);
+	this.rock = rock;
 }
 
 Ship.inherits(MovingObject);
+Asteroid.inherits(MovingObject); // Ask Kelly if order matters when setting up inheritance because functions on classes wont work if I move the inherits function below the methods defined on classses -- I think you need to set up inheritance before defining methods on classes
 
-Ship.prototype.flying = function(){
-	console.log(`${this.name} is flying at maximum speed!`);
+MovingObject.prototype.moves = function(){
+	console.log(`${this.name} just flew into thin air!`);
 }
 
-function Asteroid(name){
-	MovingObject.call(this, name);
+Ship.prototype.flies = function(){
+	console.log(`${this.name} just flew 1000 meters!`);
 }
-
-Asteroid.inherits(MovingObject);
 
 Asteroid.prototype.hit = function(){
-	console.log(`${this.name} just blew some shit up!`);
+	console.log(`${this.name} just destroyed a planet!`);
 }
 
-const ast = new Asteroid("Asterus");
-const shippy = new Ship("Shippy");
-// ast.moves();
-// shippy.moves();
-// ast.flying(); // should not work
-// ast.hit();
-// shippy.flying();
-// shippy.hit(); // should not work
+const shippy = new Ship("Shippy", "Spaceship", "Capt. Reynaldo");
+const asterus = new Asteroid("Asterus", "Asteroid", "Sedimentary");
 
-console.log(ast.__proto__.__proto__);
-console.log(shippy.__proto__.__proto__);
+shippy.moves();
+shippy.flies();
+asterus.moves();
+asterus.hit();
+// shippy.hit(); // shouldnt work
+// asterus.flies(); // shouldnt work
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Using Object.create
+Function.prototype.inherits = function(baseClass){
+	this.prototype = Object.create(baseClass.prototype);
+	this.prototype.constructor = this;
+}
