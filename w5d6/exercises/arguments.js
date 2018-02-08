@@ -64,24 +64,24 @@ Function.prototype.myBind = function (ctx) {
     // were saying this.apply passing in the context but I'm not sure why were concatinating the arguments minus the first element with all the arguments?
     return fn.apply(ctx, bindArgs.concat(callArgs));
   };
-};
+}
 
 Function.prototype.myBind2 = function (ctx, ...bindArgs) {
   return (...callArgs) => this.apply(ctx, bindArgs.concat(callArgs));
 };
 
 // bind time args are "meow" and "Kush", no call time args
-// console.log(markov.says.myBind(breakfast, "meow", "Kush")());
+console.log(markov.says.myBind(breakfast, "meow", "Kush")());
 // Breakfast says meow to Kush!
 // true
 
 // no bind time args (other than context), call time args are "meow" and "me"
-// console.log(markov.says.myBind(breakfast)("meow", "a tree"));
+console.log(markov.says.myBind(breakfast)("meow", "a tree"));
 // Breakfast says meow to a tree!
 // true
 
 // bind time arg is "meow", call time arg is "Markov"
-// console.log(markov.says.myBind(breakfast, "meow")("Markov"));
+console.log(markov.says.myBind(breakfast, "meow")("Markov"));
 // Breakfast says meow to Markov!
 // true
 
@@ -135,30 +135,31 @@ const curriedSum = (numArgs) => {
 Function.prototype.curry = function(numArgs){
 	const args = [];
 	const fn = this;
-	function _curriedSum(arg){
+	function _curriedFn(arg){
 		args.push(arg);
 		if(args.length === numArgs){
 			return fn(...args);
 		} else {
-			return _curriedSum;
+			return _curriedFn;
 		}
 	}
-	return _curriedSum;
+	return _curriedFn;
 }
 
 Function.prototype.curry = function(numArgs){
 	const args = [];
 	const fn = this;
-	function _curriedSum(arg){
+	function _curriedFn(arg){
 		args.push(arg);
 		if(args.length === numArgs){
 			// ask why we need to pass in null to .apply
+			// we need to pass in a context to .apply and it doesnt matter what the context is -- null is way to tell devs we dont care about context
 			return fn.apply(null, args);
 		} else {
-			return _curriedSum;
+			return _curriedFn;
 		}
 	}
-	return _curriedSum;
+	return _curriedFn;
 }
 // Won't work, need to write curry function
 let f1 = sumThree.curry(3); // tells `f1` to wait until 3 arguments are given before running `sumThree`

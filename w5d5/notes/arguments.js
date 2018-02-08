@@ -101,3 +101,7 @@ function add(x, y = 17){
 }
 console.log(add(3) === 20); // true
 console.log(add(3, undefined) === 20); // true
+
+
+// review spread and rest operators
+// know difference between bind, apply and call

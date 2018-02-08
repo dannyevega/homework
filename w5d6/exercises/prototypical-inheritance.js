@@ -11,6 +11,10 @@ function MovingObject(name, type){
 	this.type = type;
 }
 
+MovingObject.prototype.moves = function(){
+	console.log(`${this.name} just flew into thin air!`);
+}
+
 function Ship(name, type, captain){
 	MovingObject.call(this, name, type);
 	this.captain = captain;
@@ -23,10 +27,6 @@ function Asteroid(name, type, rock){
 
 Ship.inherits(MovingObject);
 Asteroid.inherits(MovingObject); // Ask Kelly if order matters when setting up inheritance because functions on classes wont work if I move the inherits function below the methods defined on classses -- I think you need to set up inheritance before defining methods on classes
-
-MovingObject.prototype.moves = function(){
-	console.log(`${this.name} just flew into thin air!`);
-}
 
 Ship.prototype.flies = function(){
 	console.log(`${this.name} just flew 1000 meters!`);
