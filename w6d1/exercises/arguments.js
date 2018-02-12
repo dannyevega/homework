@@ -66,6 +66,20 @@ Function.prototype.myBind = function (ctx) {
   };
 }
 
+// Remember, when we invoke the return function, it has a whole new separate context -- this is why we run 'Array.from(arguments) again inside the return function because when the function is invoked (called), it will only capture the other arguments passed in'
+Function.prototype.myBind = function(ctx){
+  	const fn = this;
+  	console.log(`ctx: ${ctx}`);
+  	const bindArgs = Array.from(arguments).slice(1);
+	console.log(`bindArgs: ${bindArgs}`);
+	return function() {
+		const callArgs = Array.from(arguments);
+		console.log(`callArgs: ${callArgs}`);
+		console.log("the bindArgs.concat(callArgs) are: " + bindArgs.concat(callArgs));
+		return fn.apply(ctx, bindArgs.concat(callArgs));
+  	};
+}
+
 Function.prototype.myBind2 = function (ctx, ...bindArgs) {
   return (...callArgs) => this.apply(ctx, bindArgs.concat(callArgs));
 };
