@@ -15,9 +15,7 @@
     return theCelebrities;
 }
 
-// Ask Kelly how to make this work -- GOT IT! Make sure to clarify about using keyword let for newID -- this is why it retains the value of i because it is block scoped within curly brackets
-
-// CLARIFY: only when you use functions within a loop is when the local variables from the closure do not behave as expected i.e. 103 being printed 3 times -- because i did increment to 3 but it never entered the for loop so the print value still holds "item2"
+// using let is block scoped so it lets you keep the current state of i
 const celebrityIDCreator = (arr) => {
     let uniqueID = 100;
     for(let i = 0; i < arr.length; i++){
@@ -90,8 +88,7 @@ oldLog(); // 5
 
 
 // 4
-// below example, clarify with Kelly WHY using let and const allows us to keep the current value of i, make sure you understand this becuase it doesnt work with using var and a function
-// also how this logs logs "item2 undefined" 3 times instead of item3 since it incremented to 3 then exited the for loop because it didnt meet the condition. Use example above about celrbity IDs
+// below code will return 'item2 undefined' 3 times because it is pushing in functions at each loop (result = [fn, fn, fn]) -- its not until those functions are invoked inside testList that it returns the values we dont want becasue i = 3 at this time -- so the variable item will always be 'item2' and list[3] === undefined
 function buildList(list) {
     var result = [];
     for (var i = 0; i < list.length; i++) {
@@ -109,8 +106,33 @@ function testList() {
 }
 testList();
 
-// using below functions keeps the current value of i
-const buildList = (list) => {
+// this will work passing in a reference to i as an IIFE pushed into the result array -- once those functions are invoked in side of testList, they will hold the correct value for i and return what we expect
+function buildList(list) {
+    var result = [];
+    for (var i = 0; i < list.length; i++) {
+        result.push( 
+            function(j){
+                var item = 'item ' + j;
+                return function(){
+                    console.log(item + ' ' + list[j]);
+                }
+            }(i)
+        );
+    }
+    return result;
+}
+
+function testList() {
+    var fnlist = buildList([1,2,3]);
+    // Using j only to help prevent confusion -- could use i.
+    for (var j = 0; j < fnlist.length; j++) {
+        fnlist[j]();
+    }
+}
+testList();
+
+// using keyword 'let' to keep the current value of i
+function buildList(list){
     let result = [];
     for(let i = 0; i < list.length; i++){
         let item = `item ${i}`;
@@ -122,7 +144,7 @@ const buildList = (list) => {
     }
     return result;
 }
-const testList = () => {
+function testList(){
     let fnList = buildList([1,2,3]);
     for(let j = 0; j < fnList.length; j++){
         fnList[j]();
@@ -181,10 +203,10 @@ let obj = { ref: 4 };
 let fn1 = newClosure(4, obj);
 let fn2 = newClosure(5, obj);
 fn1(1) // num = 5 || arr = 1,2,3,5 || obj.ref = 4
-fn2(2) // num = 6 || arr = 1,2,3,6 || obj.ref = 4
+fn2(2) // num = 7 || arr = 1,2,3,7 || obj.ref = 4
 obj.ref++;
 fn1(2) // num = 7 || arr = 1,2,3,5,7 || obj.ref = 5
-fn2(2) // num = 8 || arr = 1,2,3,6,8 || obj.ref = 5
+fn2(2) // num = 9 || arr = 1,2,3,7,9 || obj.ref = 5
 
 
 
@@ -267,7 +289,7 @@ SumCalculator.prototype.addNumbers = function(numbers){
 
 
 // 9
-// Fat Arrow functions do not create a new scope -- from my understadning, it looks like using a fat arrow DOES create a new scope
+// it looks like using a fat arrow DOES create a new scope
 // the below code will print undefined for this.name because there is no name property on the forEach function
 function Cat(name) {
     this.name = name;
