@@ -28,7 +28,7 @@
 // 	output: process.stdout
 // });
 
-// reader.question("What is your name?", function (answer) {
+// reader.question("What is your name? ", function (answer) {
 // 	console.log(`Hello ${answer}!`);
 // 	reader.close();
 // });
@@ -54,7 +54,7 @@
 
 // addTwoNumbers(function(result){
 // 	console.log(`The result is: ${result}`);
-// 	reader.close();
+// 	reader2.close();
 // });
 
 // This is a weird way to run the times function
@@ -100,7 +100,6 @@ const reader = readline.createInterface({
 
 function absurdTimesAsync (numTimes, fnAsync, completionFn) {
 	let i = 0;
-
 	function loopStep () {
 		if (i == numTimes) {
 			// we're done, stop looping
@@ -145,50 +144,50 @@ function outputResultAndCloseReader () {
 
 absurdTimesAsync(3, addTwoNumbersAndIncrementAsync, outputResultAndCloseReader);
 
-const readline = require('readline');
+// const readline = require('readline');
 
-const reader = readline.createInterface({
-	input: process.stdin,
-	output: process.stdout
-});
+// const reader = readline.createInterface({
+// 	input: process.stdin,
+// 	output: process.stdout
+// });
 
-function loopDat(num, asyncFn, completionFn){
-	let i = 0;
-	function loopStep(){
-		if(i === num){
-			completionFn();
-			return;
-		}
-		i++;
-		asyncFn(loopStep);
-	}
-	loopStep();
-}
+// function loopDat(num, asyncFn, completionFn){
+// 	let i = 0;
+// 	function loopStep(){
+// 		if(i === num){
+// 			completionFn();
+// 			return;
+// 		}
+// 		i++;
+// 		asyncFn(loopStep);
+// 	}
+// 	loopStep();
+// }
 
-let totalSum = 0;
+// let totalSum = 0;
 
-function gatherUserData(callback){
-	reader.question("Enter a number: ", function(first){
-		reader.question("Enter another number: ", function(second){
-			const one = parseInt(first);
-			const two = parseInt(second);
-			callback(one + two);
-		})
-	})
-}
+// function gatherUserData(callback){
+// 	reader.question("Enter a number: ", function(first){
+// 		reader.question("Enter another number: ", function(second){
+// 			const one = parseInt(first);
+// 			const two = parseInt(second);
+// 			callback(one + two);
+// 		})
+// 	})
+// }
 
-function gatherUserDataAsync(callback){
-	gatherUserData(function(result){
-		totalSum += result;
-		console.log(`Sum: ${result}`);
-		console.log(`Total Sum: ${totalSum}`);
-		callback();
-	});
-}
+// function gatherUserDataAsync(callback){
+// 	gatherUserData(function(result){
+// 		totalSum += result;
+// 		console.log(`Sum: ${result}`);
+// 		console.log(`Total Sum: ${totalSum}`);
+// 		callback();
+// 	});
+// }
 
-function completeProgram(){
-	console.log(`All done calculating! Your total sum is ${totalSum}`);
-	reader.close();
-}
+// function completeProgram(){
+// 	console.log(`All done calculating! Your total sum is ${totalSum}`);
+// 	reader.close();
+// }
 
-loopDat(3, gatherUserDataAsync, completeProgram)
+// loopDat(3, gatherUserDataAsync, completeProgram)

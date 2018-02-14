@@ -70,3 +70,5 @@ const noodles = new Dog ();
 
 // noodles.chase(markov);
 // noodles.chase.call(markov, noodles);
+// noodles.chase.apply(markov, [noodles]);
+// noodles.chase.bind(markov)(noodles);
