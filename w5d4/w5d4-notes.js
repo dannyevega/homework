@@ -89,10 +89,11 @@ oldLog(); // 5
 
 // 4
 // below code will return 'item2 undefined' 3 times because it is pushing in functions at each loop (result = [fn, fn, fn]) -- its not until those functions are invoked inside testList that it returns the values we dont want becasue i = 3 at this time -- so the variable item will always be 'item2' and list[3] === undefined
+// wont print what we expect -- why is this? YOU KNOW!
 function buildList(list) {
     var result = [];
     for (var i = 0; i < list.length; i++) {
-        var item = 'item' + i;
+        var item = 'item: ' + i;
         result.push( function() {console.log(item + ' ' + list[i])} );
     }
     return result;
@@ -104,7 +105,7 @@ function testList() {
         fnlist[j]();
     }
 }
-testList();
+// testList();
 
 // this will work passing in a reference to i as an IIFE pushed into the result array -- once those functions are invoked in side of testList, they will hold the correct value for i and return what we expect
 function buildList(list) {
@@ -124,20 +125,19 @@ function buildList(list) {
 
 function testList() {
     var fnlist = buildList([1,2,3]);
-    // Using j only to help prevent confusion -- could use i.
     for (var j = 0; j < fnlist.length; j++) {
         fnlist[j]();
     }
 }
-testList();
+// testList();
 
-// using keyword 'let' to keep the current value of i
+// // using keyword 'let' to keep the current value of i
 function buildList(list){
     let result = [];
     for(let i = 0; i < list.length; i++){
         let item = `item ${i}`;
         result.push(
-            () => {
+            function() {
                 console.log(`${item} is ${list[i]}`);
             }
         )
@@ -150,7 +150,27 @@ function testList(){
         fnList[j]();
     }
 }
-testList();
+// testList();
+
+// using let keyword and fat arrow function
+function buildList(list){
+    let result = [];
+    for(let i = 0; i < list.length; i++){
+        result.push(
+            () => {
+                console.log(`item ${i}: ${list[i]}`);
+            }
+        )
+    }
+    return result;
+}
+function testList(){
+    let fnList = buildList([1,2,3]);
+    for(let j = 0; j < fnList.length; j++){
+        fnList[j]();
+    }
+}
+// testList();
 
 
 
@@ -242,14 +262,14 @@ times(10, cat.ageOneYear.bind(cat));
 
 
 // 8
-// ask Kelly why I cant create constructor function using const -- tried and it throws an error when I try running addNubers method on an object sum
+// you CANNOT create function constructors using fat arrows -- it will throw an error!
 function SumCalculator() {
     this.sum = 0;
 }
 
 let sum = new SumCalculator();
 
-// this works
+// this works -- normal loopty loop
 SumCalculator.prototype.addNumbers = function(numbers){
     for(let i = 0; i < numbers.length; i++){
         this.sum += numbers[i];
@@ -257,18 +277,7 @@ SumCalculator.prototype.addNumbers = function(numbers){
     return this.sum;
 }
 
-// this also works
-// creating variable self works because its a normal local variable that holds the old reference to the SumCalculator object that addNumbers was called on
-// self variable is a normal variable captured according to typical rules, while 'this' is a special variable which is never captured and is reset on every function call
-SumCalculator.prototype.addNumbers = function(numbers){
-    let self = this;
-    numbers.forEach((number) => {
-        self.sum += number;
-    });
-    return this.sum;
-}
-
-// this wont work
+// this wont work because the callback passed to forEach is function style -- this doesnt hold the value of 'this' -- in this case, each 'this' value is the window object so when you return this.sum, it prints 0 since there is no sum on the window
 SumCalculator.prototype.addNumbers = function (numbers) {
     numbers.forEach(function(number) {
         this.sum += number;
@@ -276,7 +285,16 @@ SumCalculator.prototype.addNumbers = function (numbers) {
     return this.sum;
 };
 
-// but this will?
+// in order to make above function using function invocation work correctly, you need to pass a variable holding the reference to 'this'
+SumCalculator.prototype.addNumbers = function(numbers){
+    let self = this;
+    numbers.forEach(function(number){
+        self.sum += number;
+    });
+    return self.sum;
+}
+
+// this works because we are using fat arrow function style -- fat arrows are block scoped and retain the value of 'this' so when you update the sum inside each loop, it knows you're talking about the object you invoked the method on
 SumCalculator.prototype.addNumbers = function(numbers){
     numbers.forEach((number) => {
         this.sum += number;
@@ -289,8 +307,8 @@ SumCalculator.prototype.addNumbers = function(numbers){
 
 
 // 9
-// it looks like using a fat arrow DOES create a new scope
-// the below code will print undefined for this.name because there is no name property on the forEach function
+// Normal functions create a new scope each time the function is invoked -- Fat Arrow functions DO NOT create a new scope. In other words, 'this' means the same thing inside an arrow function that it does outside of it -- 'this' will refer to the object invoking the method, fat arrows know
+// the below code will print undefined for this.name because 'this' in this.name refers to the scope of the forEach method
 function Cat(name) {
     this.name = name;
     this.toys = ['string', 'ball', 'balloon'];
@@ -311,13 +329,21 @@ undefined plays with ball
 undefined plays with balloon
 
 // Rewriting like this tells JS that the this keyword is refering to the instance that is currently using the protoypical method
-Cat.prototype.play = function(){
+
+// function style passing variable self to tell function style invocation what 'this' is
+Cat.prototype.play = function meow() {
+    let self = this;
+    this.toys.forEach(function(toy) {
+        console.log(`${self.name} plays with ${toy}`);
+    });
+};
+
+// fat arrow function which keeps scope and value of 'this'
+Cat.prototype.play = function meow() {
     this.toys.forEach(toy => {
         console.log(`${this.name} plays with ${toy}`);
     });
 };
-// MAKE SURE TO ASK KELLY TO CLARIFY THIS!!! - WHY DOES 'this' KEEP THE SCOPE USING FAT ARROW FUNCTION
-
 
 
 
@@ -366,3 +392,21 @@ let g = new FatCat("garfield"); // TypeError: FatCat is not a constructor
 
 // 13
 // Because they don't change scope, fat arrows don't have their own arguments object.
+const hasArgs = function() {
+  let noArgs = () => arguments[0];
+  return noArgs('FakeArg');
+};
+
+hasArgs('RealArg') // returns 'RealArg';
+
+
+
+
+
+// 14
+// Fat arrows are anonymous, like their lambda counterparts in other languages.
+sayHello(name) => console.log(`Hi, ${name}!`); // SyntaxError
+(name) => console.log(`Hi, ${name}!`); // correct
+
+// If you want to name your function you must assign it to a variable like this:
+const sayHello = (name) => console.log(`Hi, ${name}!`);
