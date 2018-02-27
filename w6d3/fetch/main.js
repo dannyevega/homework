@@ -32,18 +32,18 @@ fetch(url)
 
 
 
-// Ask Kelly how would we POST?
-let data = {
-    name: 'Sara'
-}
-// Create our request constructor with all the parameters we need
-var request = new Request(url, {
-    method: 'POST', 
-    body: data, 
-    headers: new Headers()
-});
+// // Ask Kelly how would we POST?
+// let data = {
+//     name: 'Sara'
+// }
+// // Create our request constructor with all the parameters we need
+// var request = new Request(url, {
+//     method: 'POST', 
+//     body: data, 
+//     headers: new Headers()
+// });
 
-fetch(request)
-	.then(function() {
-	    // Handle response we get from the API
-	})
+// fetch(request)
+// 	.then(function() {
+// 	    // Handle response we get from the API
+// 	})
