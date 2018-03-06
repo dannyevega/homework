@@ -9,6 +9,17 @@ Array.prototype.uniq = function(){
 	// return result
 	return result;
 }
+
+Array.prototype.uniq = function(){
+	let arr = this, unique = [];
+	for(let i = 0; i < arr.length; i++){
+		if(unique.indexOf(arr[i]) === -1){
+			unique.push(arr[i]);
+		}
+	}
+	return unique;
+}
+
 let uniqArr = new Array(1,2,3,2,1,6);
 // console.log(uniqArr.uniq());
 

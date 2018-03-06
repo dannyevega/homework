@@ -33,6 +33,54 @@ let cruiseID = createIdForActionCelebs[1];
 
 
 
+// Closure inside loops
+// PROBLEM: the variable i, within each of your anonymous functions, is bound to the same variable outside of the function i.e. value of i when each anonymous function is executed will be the same value --> 3
+var funcs = [];
+for(var i = 0; i < 3; i++){
+    funcs[i] = function(){              // pushing anon functions in this way will hold same value of i --> 3
+        console.log(`My value: ${i}`); 
+    }
+}
+for (var j = 0; j < 3; j++) {
+  funcs[j]();
+}
+
+// solution 1 -- IIFE
+// IIFE sends the iterator i into the anonymous function which we define as j. This creates a closure, where the variable i gets saved for later use in any asynchronous functionality within the IIFE
+for(var i = 0; i < 3; i++){
+    funcs[i] = (function(j){
+        return function(){
+            console.log(`My value: ${j}`); 
+        }
+    }(i));
+}
+for (var j = 0; j < 3; j++) {
+  funcs[j]();
+}
+
+// solution 2 -- using .bind on anonymous function
+// binds the value of i to the anonymous function which we define as j
+for(var i = 0; i < 3; i++){
+    funcs[i] = function(j){
+        console.log(`My value: ${j}`); 
+    }.bind(this, i);
+}
+for (var j = 0; j < 3; j++) {
+  funcs[j]();
+}
+
+// solution 3 -- using let instead of var since let is block scoped and will retain value of i
+for(let i = 0; i < 3; i++){
+    funcs[i] = function(){
+        console.log(`My value: ${i}`); 
+    }
+}
+for (var j = 0; j < 3; j++) {
+  funcs[j]();
+}
+
+
+
 
 
 // 2

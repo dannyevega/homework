@@ -34,7 +34,7 @@ Array.prototype.myReduce = function(callback, initialValue){
 	let accumulator = (initialValue === undefined) ? undefined : initialValue;
 	for(let i = 0; i < this.length; i++){
 		if(accumulator !== undefined){
-			accumulator = callback.call(undefined, accumulator, this[i]);
+			accumulator = callback.call(null, accumulator, this[i]);
 		} else {
 			accumulator = this[i];
 		}
